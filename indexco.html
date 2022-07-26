@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device=width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="/conversormoedas/styloconvsersor.css">
+
+        <title>Conversor de Moedas</title>
+
+        </head>
+        <body>
+    
+                <h1>Conversor de Moedas</h1>
+            <div class=" conteudo">
+            <label for="ValorEmReal">R$</label>
+            <input type="number" name="ValorEmReal" id="ValorEmReal" step="0.01" class="input" min="0.00" max="9999999.00" value='' tabindex="1" onclick='AtivarBotao()' onchange='AtivarBotao()' autofocus required /> 
+               </div>
+            
+               <br>
+
+            <div class="opcoes">
+            <input type="radio" name="MoedaEstrangeira" class="input radio" id="Dolar" tabindex="2" value="Dolar" /> <label for="Dolar">Dólar</label>
+            
+
+            
+                
+            <input type="radio" name="MoedaEstrangeira" class="input radio" id="Libra" tabindex="3" value="Libra" /> <label for="Libras">Libra</label>
+        
+
+            
+            <input type="radio" name="MoedaEstrangeira" class="input radio" id="Euro" tabindex="4" value="Euro" /> <label for="Euro">Euro</label>
+            
+            
+            
+                
+            <input type="radio" name="MoedaEstrangeira" class="input radio" id="Yuan" tabindex="5" value="Yuan" /> <label for="Yuan">Yuan</label>
+            </div>
+            
+
+            <div class="form-group">
+                <br>
+           <button class='desativado botao' id='BtnConverter'
+           onClick='AtivarBotao(); BloquearBotao()' disabled>Converter</button>
+           <button type="reset" class='botao' id='BtnLimpar' tabindex="7">Limpar</button>
+       </div>
+    
+    <div class="instrucoes">
+        <p class='centro' id='Aviso'>Digite o valor, escolha a moeda e converter</p>
+    </div>
+    <br>
+    
+            
+            <script>
+                
+                let ValorDigitado = document.querySelector('#ValorEmReal')
+                let MoedaSelecionada = document.getElementsByName('MoedaEstrangeira')
+                let Aviso = document.querySelector('#Aviso')
+                let BtnConverter = document.querySelector('#BtnConverter')
+                let BtnLimpar = document.querySelector('#BtnLimpar')
+                 //COTAÇÕES REFERENTES AO DIA DE 19/06/2022
+                 let VaLorEmDolar = 5.42
+                 let ValorEmLibras = 6.50
+                 let ValorEmEuro = 5.54
+                 let ValorEmYuan = 0.80
+                 let ValorEmReal = 0
+                 
+                 let MoedaEstrangeira = ''
+                 let MoedaConvertida = 0.00
+
+                 function MensagemFormatada (MoedaConvertida) {
+                    isNaN(ValorEmReal) ? ValorEmReal = 0 : 
+                    console.log("Moeda Convertida " + MoedaConvertida)
+                    Aviso.textContent = "O valor de " + (ValorEmReal).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL'}) + " covertido em " + MoedaEstrangeira + " é de " + MoedaConvertida 
+                 }
+
+                 function BloquearBotao() {
+                    if(ValorDigitado.value == 0 || ValorDigitado == ''|| ValorDigitado == null) {
+                        BtnConverter.setAttribute('disabled', 'disabled')
+                        BtnConverter.style.background = '#ccc'
+                        BtnConverter.style.cursor = 'not-allowed'
+                    }
+                 }
+                 
+                 function AtivarBotao() {
+                    if(ValorDigitado.value > 0) {
+                        BtnConverter.removeAttribute('disabled')
+                        BtnConverter.style.background = '#ffc107'
+                        BtnConverter.style.cursor = 'pointer'
+                    } else {
+                        console.log('Não ativou')
+                    }
+                 }
+
+                 BtnConverter.addEventListener('click', function() {
+                    ValorEmReal = parseFloat(ValorDigitado.value)
+                    console.log('Escolhe a moeda estrangeira')
+
+                    for(let i = 0; i < MoedaSelecionada.length; i++) {
+                      if(MoedaSelecionada[i].checked)  {
+                        MoedaEstrangeira = MoedaSelecionada[i].value
+                        console.log(MoedaEstrangeira)
+                      }
+                    }
+                 
+    
+switch(MoedaEstrangeira) {
+    case 'Dolar':
+        MoedaConvertida = ValorEmReal / VaLorEmDolar
+        MensagemFormatada(MoedaConvertida.toLocaleString('en-US', {style:'currency', currency:'USD' }))
+        break
+
+        case 'Libra':  
+        MoedaConvertida = ValorEmReal / ValorEmLibras
+        MensagemFormatada(MoedaConvertida.toLocaleString('en-GB', {style:'currency', currency:'GBP' }))
+        break
+
+        case 'Euro':
+            MoedaConvertida = ValorEmReal / ValorEmEuro
+            MensagemFormatada(MoedaConvertida.toLocaleString('de-DE', { style:'currency', currency:'EUR'}))
+            break
+            
+        case 'Yuan':
+            MoedaConvertida = ValorEmReal / ValorEmYuan
+            MensagemFormatada(MoedaConvertida.toLocaleString('ch-CH', { style: 'currency', currency:'RMB'}))
+            break
+
+        default:
+            Aviso.textContent = 'Escolha uma moeda estrangeira' }
+            isNaN(MoedaConvertida) ? MoedaConvertida = 0 : ''
+})
+
+BtnLimpar.addEventListener('click', function() {
+    ValorDigitado.focus()
+    ValorDigitado.value = ''
+    Aviso.textContent = 'Digite o valor, escolha a moeda e converter'
+    MoedaSelecionada[0].checked = false
+    MoedaSelecionada[1].checked = false
+    MoedaSelecionada[2].checked = false
+    MoedaSelecionada[3].checked = false
+})
+
+</script>
+<style>
+    @font-face {
+        font-family:'DS' ;
+        src: url('DS-DIGI.TTF') format('truetype');
+    }
+
+</style>
+</main></body></html>
